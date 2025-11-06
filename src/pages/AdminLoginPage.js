@@ -1,24 +1,19 @@
-// Ubicación: src/pages/LoginPage.js
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext'; 
+import { useTheme } from '../context/ThemeContext';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const LoginPage = () => {
-    // Hooks de React Router y de nuestros contextos
+const AdminLoginPage = () => {
     const { tenantId } = useParams();
     const { theme, loading: themeLoading } = useTheme();
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    // Estado local del formulario
-    const [username, setUsername] = useState('jgrimes');
+    const [username, setUsername] = useState('admin_user'); 
     const [password, setPassword] = useState('password123');
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Efecto para limpiar el formulario si el tenantId cambia
     useEffect(() => {
         setError('');
     }, [tenantId]);
@@ -28,22 +23,25 @@ const LoginPage = () => {
         setError('');
         setIsSubmitting(true);
         try {
-            await login(tenantId, username, password);
-            navigate(`/${tenantId}/dashboard`); // Redirige al dashboard del tenant
+            // Llama a la función de login, SIEMPRE con el tipo 'admin'
+            await login(tenantId, username, password, 'admin');
+            // Redirige al dashboard de administración
+            navigate(`/${tenantId}/admin/dashboard`);
         } catch (err) {
-            setError('Fallo el login. Revisa tus credenciales.');
+            setError('Fallo el login. Revisa tus credenciales de administrador.');
         } finally {
             setIsSubmitting(false);
         }
     };
-
+    
+    
     const styles = {
         pageContainer: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
-            backgroundColor: theme.colorFondo, // << Color de fondo dinámico
+            backgroundColor: theme.colorFondo, 
             transition: 'background-color 0.3s ease',
         },
         container: {
@@ -67,7 +65,7 @@ const LoginPage = () => {
             color: '#333',
         },
         tenantName: {
-            color: theme.colorPrimario, // << Color primario dinámico
+            color: theme.colorPrimario, 
         },
         formGroup: {
             marginBottom: '20px',
@@ -87,7 +85,7 @@ const LoginPage = () => {
         button: {
             width: '100%',
             padding: '12px',
-            backgroundColor: theme.colorPrimario, // << Color primario dinámico
+            backgroundColor: theme.colorPrimario, 
             color: 'white',
             border: 'none',
             borderRadius: '5px',
@@ -103,37 +101,25 @@ const LoginPage = () => {
             color: 'red',
             textAlign: 'center',
             marginBottom: '15px',
-        },
+        }, 
     };
 
-    // Muestra un estado de carga mientras el tema se obtiene de la API
     if (themeLoading) {
         return <div style={{ textAlign: 'center', marginTop: '100px' }}>Cargando personalización...</div>;
-    }
-
-    if (!tenantId) {
-        return (
-            <div style={styles.pageContainer}>
-                <div style={styles.container}>
-                    <h2 style={styles.error}>Error: Tenant no especificado en la URL.</h2>
-                </div>
-            </div>
-        );
     }
 
     return (
         <div style={styles.pageContainer}>
             <div style={styles.container}>
-                {/* 3. Usamos los datos del tema para renderizar el logo y el título */}
                 {theme.logoUrl && <img src={theme.logoUrl} alt={`Logo de ${theme.tituloPrincipal}`} style={styles.logo} />}
                 
                 <h2 style={styles.title}>
-                    {theme.tituloPrincipal}
+                    Portal de Administración
                 </h2>
                 
                 <form onSubmit={handleSubmit}>
                     <div style={styles.formGroup}>
-                        <label htmlFor="username" style={styles.label}>Usuario</label>
+                        <label htmlFor="username" style={styles.label}>Usuario Administrador</label>
                         <input
                             id="username"
                             style={styles.input}
@@ -170,4 +156,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default AdminLoginPage;

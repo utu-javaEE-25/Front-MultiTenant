@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const login = async (tenantId, username, password) => {
+    /*const login = async (tenantId, username, password) => {
         try {
             // Construimos la URL dinámica
             const response = await apiClient.post(`/${tenantId}/api/auth/login`, { username, password });
@@ -39,7 +39,30 @@ export const AuthProvider = ({ children }) => {
             console.error("Error en el login:", error);
             throw error; 
         }
+    };*/
+    const login = async (tenantId, username, password, userType) => {
+        // Determina el endpoint correcto basado en el tipo de usuario
+        const loginEndpoint = userType === 'admin' ? 'admin' : 'profesional';
+
+        try {
+            const response = await apiClient.post(
+                `/${tenantId}/api/auth/login/${loginEndpoint}`,
+                { username, password }
+            );
+            const { token } = response.data;
+
+            localStorage.setItem('authToken', token);
+            setAuthToken(token);
+            const decoded = jwtDecode(token);
+            setUser({ token, ...decoded });
+            
+        } catch (error) {
+            console.error(`Error en el login de ${userType}:`, error);
+            // Propaga el error para que el componente de la página de login pueda manejarlo
+            throw error;
+        }
     };
+
 
     const logout = () => {
         localStorage.removeItem('authToken');

@@ -1,73 +1,91 @@
+// RUTA: src/pages/AdminDashboardPage.js
+
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import ImportarPaciente from '../components/ImportarPaciente';
+import CrearPacienteAdmin from '../components/CrearPacienteAdmin'; // <-- PASO 1: IMPORTAR EL NUEVO COMPONENTE
 
 const AdminDashboardPage = () => {
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
-    // Estilos básicos para la página
-    const styles = {
-        container: {
-            padding: '20px',
-            fontFamily: 'sans-serif',
+    const menuOptions = [
+        {
+            title: 'Gestionar Profesionales',
+            description: 'Añadir, editar o eliminar cuentas de profesionales de la salud.',
+            path: `/${user?.tenant_id}/admin/profesionales`,
+            icon: '👥'
         },
-        header: {
-            borderBottom: '2px solid #eee',
-            paddingBottom: '10px',
-            marginBottom: '20px',
+        {
+            title: 'Configuración',
+            description: 'Ajustar parámetros y personalización de la clínica.',
+            path: `/${user?.tenant_id}/admin/settings`,
+            icon: '⚙️'
         },
-        button: {
-            padding: '10px 15px',
-            backgroundColor: '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
+        {
+            title: 'Reportes y Estadísticas',
+            description: 'Visualizar datos y métricas de uso (próximamente).',
+            path: '#',
+            icon: '📊'
         },
-        nav: {
-            marginTop: '30px',
+        {
+            title: 'Editar Profesional por Email',
+            description: 'Buscar un profesional por su correo y modificar sus datos.',
+            path: `/${user?.tenant_id}/admin/profesionales/editar`,
+            icon: '✏️'
         },
-        navList: {
-            listStyle: 'none',
-            padding: 0,
-        },
-        navItem: {
-            marginBottom: '10px',
-        },
-        navLink: {
-            textDecoration: 'none',
-            color: '#007bff',
-            fontSize: '1.1em',
+    ];
+
+    const handleCardClick = (path) => {
+        if (path !== '#') {
+            navigate(path);
         }
     };
 
     return (
         <div style={styles.container}>
-            <div style={styles.header}>
-                <h1>Dashboard de Administración del Tenant: {user?.tenant_id}</h1>
-                <p>Bienvenido, Administrador <strong>{user?.sub}</strong>.</p>
-                <button onClick={logout} style={styles.button}>Cerrar Sesión</button>
-            </div>
-            
-            <p>Desde aquí puedes gestionar los recursos de la clínica.</p>
+            <header style={styles.header}>
+                <div>
+                    <h1>Dashboard de Administración</h1>
+                    <p>Bienvenido, <strong>{user?.sub}</strong> (Tenant: {user?.tenant_id})</p>
+                </div>
+                <button onClick={logout} style={styles.logoutButton}>Cerrar Sesión</button>
+            </header>
 
-            <nav style={styles.nav}>
-                <h3>Menú de Administración</h3>
-                <ul style={styles.navList}>
-                    <li style={styles.navItem}>
-                        {/* En el futuro, estos enlaces usarán <Link> de react-router-dom */}
-                        <a href={`/${user?.tenant_id}/admin/profesionales`} style={styles.navLink}>
-                            Gestionar Profesionales
-                        </a>
-                    </li>
-                    <li style={styles.navItem}>
-                        <a href={`/${user?.tenant_id}/admin/settings`} style={styles.navLink}>
-                            Configuración de la Clínica
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <div style={{ padding: '0 40px 40px 40px' }}>
+                <ImportarPaciente />
+                <CrearPacienteAdmin /> {/* <-- PASO 2: AÑADIR EL NUEVO COMPONENTE AL LAYOUT */}
+            </div>
+
+            <div style={styles.menuGrid}>
+                {menuOptions.map((option, index) => (
+                    <div
+                        key={index}
+                        style={option.path === '#' ? {...styles.card, ...styles.cardDisabled} : styles.card}
+                        onClick={() => handleCardClick(option.path)}
+                    >
+                        <div style={styles.cardIcon}>{option.icon}</div>
+                        <h3 style={styles.cardTitle}>{option.title}</h3>
+                        <p style={styles.cardDescription}>{option.description}</p>
+                    </div>
+                ))}
+            </div>
         </div>
     );
+};
+
+// Estilos (sin cambios)
+const styles = {
+    container: { fontFamily: 'sans-serif', backgroundColor: '#f4f7f9', minHeight: '100vh' },
+    header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', backgroundColor: 'white', borderBottom: '1px solid #ddd' },
+    logoutButton: { padding: '8px 12px', border: 'none', backgroundColor: '#dc3545', color: 'white', borderRadius: '5px', cursor: 'pointer' },
+    menuGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', padding: '0 40px 40px 40px' },
+    card: { backgroundColor: 'white', padding: '25px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s', borderLeft: '5px solid #007bff' },
+    cardDisabled: { cursor: 'not-allowed', backgroundColor: '#e9ecef', borderLeft: '5px solid #6c757d' },
+    cardIcon: { fontSize: '2.5rem', marginBottom: '15px' },
+    cardTitle: { margin: '0 0 10px 0', color: '#333' },
+    cardDescription: { margin: 0, color: '#666', fontSize: '0.9rem' },
 };
 
 export default AdminDashboardPage;

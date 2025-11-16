@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext'; 
+import { useTheme } from '../context/ThemeContext';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const ProfesionalLoginPage = () => {
@@ -43,7 +43,7 @@ const ProfesionalLoginPage = () => {
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
-            backgroundColor: theme.colorFondo, 
+            backgroundColor: theme.colorFondo,
             transition: 'background-color 0.3s ease',
         },
         container: {
@@ -67,7 +67,7 @@ const ProfesionalLoginPage = () => {
             color: '#333',
         },
         tenantName: {
-            color: theme.colorPrimario, 
+            color: theme.colorPrimario,
         },
         formGroup: {
             marginBottom: '20px',
@@ -87,7 +87,7 @@ const ProfesionalLoginPage = () => {
         button: {
             width: '100%',
             padding: '12px',
-            backgroundColor: theme.colorPrimario, 
+            backgroundColor: theme.colorPrimario,
             color: 'white',
             border: 'none',
             borderRadius: '5px',
@@ -126,11 +126,11 @@ const ProfesionalLoginPage = () => {
             <div style={styles.container}>
                 {/* 3. Usamos los datos del tema para renderizar el logo y el título */}
                 {theme.logoUrl && <img src={theme.logoUrl} alt={`Logo de ${theme.tituloPrincipal}`} style={styles.logo} />}
-                
+
                 <h2 style={styles.title}>
                     {theme.tituloPrincipal}
                 </h2>
-                
+
                 <form onSubmit={handleSubmit}>
                     <div style={styles.formGroup}>
                         <label htmlFor="username" style={styles.label}>Usuario</label>

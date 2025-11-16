@@ -9,8 +9,8 @@ const AdminLoginPage = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
 
-    const [username, setUsername] = useState('admin_user'); 
-    const [password, setPassword] = useState('password123');
+    const [username, setUsername] = useState('admin_a');
+    const [password, setPassword] = useState('adminpass456');
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -33,15 +33,15 @@ const AdminLoginPage = () => {
             setIsSubmitting(false);
         }
     };
-    
-    
+
+
     const styles = {
         pageContainer: {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: '100vh',
-            backgroundColor: theme.colorFondo, 
+            backgroundColor: theme.colorFondo,
             transition: 'background-color 0.3s ease',
         },
         container: {
@@ -65,7 +65,7 @@ const AdminLoginPage = () => {
             color: '#333',
         },
         tenantName: {
-            color: theme.colorPrimario, 
+            color: theme.colorPrimario,
         },
         formGroup: {
             marginBottom: '20px',
@@ -85,7 +85,7 @@ const AdminLoginPage = () => {
         button: {
             width: '100%',
             padding: '12px',
-            backgroundColor: theme.colorPrimario, 
+            backgroundColor: theme.colorPrimario,
             color: 'white',
             border: 'none',
             borderRadius: '5px',
@@ -101,7 +101,7 @@ const AdminLoginPage = () => {
             color: 'red',
             textAlign: 'center',
             marginBottom: '15px',
-        }, 
+        },
     };
 
     if (themeLoading) {
@@ -112,11 +112,11 @@ const AdminLoginPage = () => {
         <div style={styles.pageContainer}>
             <div style={styles.container}>
                 {theme.logoUrl && <img src={theme.logoUrl} alt={`Logo de ${theme.tituloPrincipal}`} style={styles.logo} />}
-                
+
                 <h2 style={styles.title}>
                     Portal de Administración
                 </h2>
-                
+
                 <form onSubmit={handleSubmit}>
                     <div style={styles.formGroup}>
                         <label htmlFor="username" style={styles.label}>Usuario Administrador</label>

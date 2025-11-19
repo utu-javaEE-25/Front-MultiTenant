@@ -29,12 +29,7 @@ const AdminDashboardPage = () => {
             path: '#',
             icon: '📊'
         },
-        {
-            title: 'Editar Profesional por Email',
-            description: 'Buscar un profesional por su correo y modificar sus datos.',
-            path: `/${user?.tenant_id}/admin/profesionales/editar`,
-            icon: '✏️'
-        },
+
     ];
 
     const handleCardClick = (path) => {
